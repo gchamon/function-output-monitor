@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "function-output-monitor"
+version = "0.1.0"
+description = "Watches for a specific function return to change before timeout expires"
+authors = ["Gabriel Chamon Araujo <gabriel.chamon@tutanota.com>"]
+license = "MIT license"
+readme = "README.md"
+packages = [{include = "function_output_monitor"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.5.0"
+pytest = "^7.1.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
