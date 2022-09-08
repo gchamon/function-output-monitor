@@ -6,7 +6,7 @@ import pytest
 from function_output_monitor.alarm import (Alarm,
                                            WaitWithoutStartingError,
                                            StartWithoutResettingError,
-RestartWithoutStartingError,
+                                           ResetWithoutStartingError,
                                            AlreadyStartedError)
 
 ALARM_TIMEOUT = 0.01
@@ -126,5 +126,12 @@ def test_alarm_start_after_timeout_without_restart(alarm: Alarm):
 
 
 def test_alarm_restart_without_starting(alarm: Alarm):
-    with pytest.raises(RestartWithoutStartingError):
+    """restart without starting the alarm first raises error"""
+    with pytest.raises(ResetWithoutStartingError):
         alarm.restart()
+
+
+def test_alarm_reset_without_starting(alarm: Alarm):
+    """reset without starting the alarm first raises error"""
+    with pytest.raises(ResetWithoutStartingError):
+        alarm.reset()

@@ -16,7 +16,7 @@ class StartWithoutResettingError(Exception):
     pass
 
 
-class RestartWithoutStartingError(Exception):
+class ResetWithoutStartingError(Exception):
     pass
 
 
@@ -38,6 +38,9 @@ class Alarm:
         self.event.wait(timeout)
 
     def reset(self):
+        if self.timer is None:
+            raise ResetWithoutStartingError()
+
         if self.timer is not None:
             self.timer.cancel()
 
@@ -56,9 +59,6 @@ class Alarm:
         self.timer.start()
 
     def restart(self):
-        if self.timer is None:
-            raise RestartWithoutStartingError()
-
         self.reset()
         self.start()
 
