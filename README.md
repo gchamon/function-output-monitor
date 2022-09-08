@@ -1,2 +1,2 @@
-# timed-function-monitor
-Watches for a specific function return to change before timeout expires
+# function-output-monitor
+Watches for a specific function output to change before timeout expires
