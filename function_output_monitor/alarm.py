@@ -20,6 +20,10 @@ class ResetWithoutStartingError(Exception):
     pass
 
 
+class StopWithoutStartingError(Exception):
+    pass
+
+
 class Alarm:
     alarmed: bool
     timeout: NumberType
@@ -31,6 +35,13 @@ class Alarm:
         self.timeout = timeout
         self.timer = None
 
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
+
     def wait(self, timeout: NumberType):
         if self.timer is None or self.timer.finished.is_set() is True:
             raise WaitWithoutStartingError()
@@ -41,10 +52,14 @@ class Alarm:
         if self.timer is None:
             raise ResetWithoutStartingError()
 
-        if self.timer is not None:
-            self.timer.cancel()
-
         self.alarmed = False
+        self.stop()
+
+    def stop(self):
+        if self.timer is None:
+            raise StopWithoutStartingError()
+
+        self.timer.cancel()
         self.event.clear()
 
     def start(self):

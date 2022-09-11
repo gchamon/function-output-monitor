@@ -2,9 +2,11 @@ from functools import wraps
 from timeit import default_timer
 
 import pytest
+from pytest_mock import MockerFixture
 
 from function_output_monitor.alarm import (Alarm,
                                            WaitWithoutStartingError,
+                                           StopWithoutStartingError,
                                            StartWithoutResettingError,
                                            ResetWithoutStartingError,
                                            AlreadyStartedError)
@@ -141,3 +143,28 @@ def test_alarm_reset_without_starting(alarm: Alarm):
     """reset without starting the alarm first raises error"""
     with pytest.raises(ResetWithoutStartingError):
         alarm.reset()
+
+
+def test_alarm_stop_without_starting(alarm: Alarm):
+    """stop without starting the alarm first raises error"""
+    with pytest.raises(StopWithoutStartingError):
+        alarm.stop()
+
+
+def test_alarm_in_with_block():
+    expected_end_time_ceil = 0.006
+
+    @asset_max_function_execution_time(expected_end_time_ceil, expected_time_floor=0.001)
+    def f():
+        with Alarm(ALARM_TIMEOUT) as alarm:
+            alarm.wait(0.005)
+
+
+def test_alarm_start_stop_called_in_with(mocker: MockerFixture):
+    """with blocks should automatically start and stop the alarm"""
+    start_mock = mocker.patch("function_output_monitor.alarm.Alarm.start")
+    stop_mock = mocker.patch("function_output_monitor.alarm.Alarm.stop")
+    with Alarm(0.1) as _:
+        start_mock.assert_called_once()
+        stop_mock.assert_not_called()
+    stop_mock.assert_called_once()
