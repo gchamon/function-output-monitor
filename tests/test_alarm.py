@@ -35,7 +35,7 @@ def asset_max_function_execution_time(expected_end_time_ceil, expected_time_floo
 
 def test_alarm_timeout(alarm: Alarm):
     """should return before the wait_time, respecting the alarm timeout"""
-    expected_end_time_ceil = 0.011
+    expected_end_time_ceil = 0.012
     wait_time = 2
 
     @asset_max_function_execution_time(expected_end_time_ceil, expected_time_floor=ALARM_TIMEOUT)
