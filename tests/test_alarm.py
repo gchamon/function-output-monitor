@@ -97,6 +97,12 @@ def test_alarm_without_starting(alarm: Alarm):
         alarm.wait(wait_time)
 
 
+def test_alarm_in_while_loop(alarm: Alarm):
+    alarm.start()
+    while alarm.alarmed is False:
+        alarm.wait(0.002)
+
+
 def test_alarm_with_reset_without_start(alarm: Alarm):
     """after resetting the alarm, if we don't start the alarm, waiting raises an error"""
     wait_time = 0.001
