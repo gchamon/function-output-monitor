@@ -152,9 +152,9 @@ def test_alarm_stop_without_starting(alarm: Alarm):
 
 
 def test_alarm_in_with_block():
-    expected_end_time_ceil = 0.006
+    expected_end_time_ceil = 0.007
 
-    @asset_max_function_execution_time(expected_end_time_ceil, expected_time_floor=0.001)
+    @asset_max_function_execution_time(expected_end_time_ceil, expected_time_floor=0.005)
     def f():
         with Alarm(ALARM_TIMEOUT) as alarm:
             alarm.wait(0.005)
